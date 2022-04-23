@@ -52,7 +52,7 @@ namespace vizeprojesi.Controllers
                 ans = x.ans,
                 UyeId = x.UyeId
 
-            }).FirstOrDefault();
+            }).SingleOrDefault();
             return soru;
         }
 
@@ -80,7 +80,109 @@ namespace vizeprojesi.Controllers
             db.SaveChanges();
 
             sonuc.islem = true;
-            sonuc.mesaj = "Soru Eklendi bstuhan salkım";
+            sonuc.mesaj = "Soru Eklendi";
+            return sonuc;
+        }
+
+
+        [HttpPut]
+        [Route("api/soruduzenle")]
+        public SonucModel SoruDuzenle(SoruModel model)
+        {
+            Soru kayit = db.Soru.Where(s => s.SoruId == model.SoruId).FirstOrDefault();
+
+            if(kayit == null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Soru Bulunamadı";
+                return sonuc;
+            }
+
+            kayit.soru1 = model.soru1;
+            kayit.oA = model.oA;
+            kayit.oB = model.oB;
+            kayit.oC = model.oC;
+            kayit.oD = model.oD;
+            kayit.ans = model.ans;
+            kayit.UyeId = "1";
+            db.SaveChanges();
+
+            sonuc.islem = true;
+            sonuc.mesaj = "Soru Düzenlendi";
+
+            return sonuc;
+        }
+
+        [HttpDelete]
+        [Route("api/sorusil/{SoruId}")]
+
+        public SonucModel SoruSil(string soruId)
+        {
+            Soru kayit = db.Soru.Where(s => s.SoruId == soruId).SingleOrDefault();
+            {
+                if(kayit == null)
+                {
+                    sonuc.islem = false;
+                    sonuc.mesaj = "Soru Bulunamadı";
+                    return sonuc;
+                }
+                db.Soru.Remove(kayit);
+                db.SaveChanges();
+                sonuc.islem = true;
+                sonuc.mesaj = "Soru Silindi";
+                return sonuc;
+            }
+        }
+        #endregion
+
+        #region DersiAlanOgrenciler
+
+        [HttpGet]
+        [Route("api/dersialanlar")]
+
+        public List<DersiAlanOgrModel> DersiAlanListe()
+        {
+            List<DersiAlanOgrModel> liste = db.DersiAlanOgr.Select(x => new DersiAlanOgrModel()
+            {
+                ogrId = x.ogrId,
+                ogrNo = x.ogrNo,
+                ogrAdSoyad = x.ogrAdSoyad,
+                ogrDogTarih = x.ogrDogTarih,
+                ogrFoto = x.ogrFoto,
+                UyeId = "1",
+
+            }).ToList();
+            return liste;
+        }
+
+        [HttpGet]
+        [Route("api/dersialanogr/{ogrId}")]
+
+        public DersiAlanOgrModel DersiAlanOgrById(string ogrId)
+        {
+            DersiAlanOgrModel kayit = db.DersiAlanOgr.Where(s=>s.ogrId==ogrId).Select(x => new DersiAlanOgrModel()
+            {
+
+                ogrId = x.ogrId,
+                ogrNo = x.ogrNo,
+                ogrAdSoyad = x.ogrAdSoyad,
+                ogrDogTarih = x.ogrDogTarih,
+                ogrFoto = x.ogrFoto,
+                UyeId = "1",
+
+            }).SingleOrDefault();
+            return kayit;
+        }
+
+        [HttpPost]
+        [Route("api/dersialanogrekle")]
+        public SonucModel DersiAlanOgrEkle(DersiAlanOgrModel model)
+        {
+            if(db.DersiAlanOgr.Count(s=> s.ogrNo==model.ogrNo)>0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Girilen Öğrenci Numarası Kayıtlıdır";
+            }
             return sonuc;
         }
 
