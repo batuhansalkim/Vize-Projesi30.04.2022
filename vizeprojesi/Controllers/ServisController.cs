@@ -80,7 +80,7 @@ namespace vizeprojesi.Controllers
             db.SaveChanges();
 
             sonuc.islem = true;
-            sonuc.mesaj = "Soru Eklendi";
+            sonuc.mesaj = "Soru Eklendi bstuhan salkım";
             return sonuc;
         }
 
