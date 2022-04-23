@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="aa51aa67fd404d418092e977efee2bcb" Name="Diagram1">
+        <EntityTypeShape EntityType="DB03Model.DersiAlanOgr" Width="1.5" PointX="5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB03Model.Dersler" Width="1.5" PointX="10" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB03Model.Kayit" Width="1.5" PointX="7.625" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB03Model.Soru" Width="1.5" PointX="5" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB03Model.Uye" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <AssociationConnector Association="DB03Model.FK_DersiAlanOgr_ToUye" ManuallyRouted="false" />
+        <AssociationConnector Association="DB03Model.FK_Kayit_ToDersiAlanOgr" ManuallyRouted="false" />
+        <AssociationConnector Association="DB03Model.FK_Kayit_ToDersler" ManuallyRouted="false" />
+        <AssociationConnector Association="DB03Model.FK_Soru_ToUye" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
