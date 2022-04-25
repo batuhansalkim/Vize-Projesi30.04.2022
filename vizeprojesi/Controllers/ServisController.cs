@@ -138,9 +138,9 @@ namespace vizeprojesi.Controllers
         #region DersiAlanOgrenciler
 
         [HttpGet]
-        [Route("api/dersialanlar")]
+        [Route("api/dersialanlarliste")]
 
-        public List<DersiAlanOgrModel> DersiAlanListe()
+        public List<DersiAlanOgrModel> DersiAlanOgr()
         {
             List<DersiAlanOgrModel> liste = db.DersiAlanOgr.Select(x => new DersiAlanOgrModel()
             {
@@ -150,42 +150,68 @@ namespace vizeprojesi.Controllers
                 ogrDogTarih = x.ogrDogTarih,
                 ogrFoto = x.ogrFoto,
                 UyeId = "1",
-
             }).ToList();
             return liste;
         }
 
         [HttpGet]
-        [Route("api/dersialanogr/{ogrId}")]
+        [Route("api/dersialanogrbyid/{ogrId}")]
 
-        public DersiAlanOgrModel DersiAlanOgrById(string ogrId)
+        public DersiAlanOgrModel OgrenciById(string ogrId)
         {
-            DersiAlanOgrModel kayit = db.DersiAlanOgr.Where(s=>s.ogrId==ogrId).Select(x => new DersiAlanOgrModel()
-            {
-
-                ogrId = x.ogrId,
-                ogrNo = x.ogrNo,
-                ogrAdSoyad = x.ogrAdSoyad,
-                ogrDogTarih = x.ogrDogTarih,
-                ogrFoto = x.ogrFoto,
-                UyeId = "1",
-
-            }).SingleOrDefault();
-            return kayit;
+            DersiAlanOgrModel Kayit = db.DersiAlanOgr.Where(s => s.ogrId == ogrId).Select(x =>
+             new DersiAlanOgrModel()
+             {
+                 ogrId = x.ogrId,
+                 ogrNo = x.ogrNo,
+                 ogrAdSoyad = x.ogrAdSoyad,
+                 ogrDogTarih = x.ogrDogTarih,
+                 ogrFoto = x.ogrFoto,
+                 UyeId = "1",
+             }).SingleOrDefault();
+            return Kayit;
         }
 
         [HttpPost]
-        [Route("api/dersialanogrekle")]
-        public SonucModel DersiAlanOgrEkle(DersiAlanOgrModel model)
+        [Route("api/ogrenciekle")]
+
+        public SonucModel OgrenciEkle(DersiAlanOgrModel model)
         {
-            if(db.DersiAlanOgr.Count(s=> s.ogrNo==model.ogrNo)>0)
+            if (db.DersiAlanOgr.Count(s=> s.ogrNo == model.ogrNo) > 0)
             {
                 sonuc.islem = false;
                 sonuc.mesaj = "Girilen Öğrenci Numarası Kayıtlıdır";
             }
+
+            DersiAlanOgr yeni = new DersiAlanOgr();
+            yeni.ogrId = model.ogrId;
+            yeni.ogrNo = model.ogrNo;
+            yeni.ogrAdSoyad = model.ogrAdSoyad;
+            yeni.ogrDogTarih = model.ogrDogTarih;
+            yeni.ogrFoto = model.ogrFoto;
+            yeni.UyeId = "1";
+            db.DersiAlanOgr.Add(yeni);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Öğrenci Eklendi";
+
             return sonuc;
         }
 
+        [HttpPut]
+        [Route("api/ogrenciduzenle")]
+
+        public SonucModel OgrenciDuzenle(DersiAlanOgrModel model)
+        {
+            DersiAlanOgr kayit = db.DersiAlanOgr.Where(s => s.ogrId == model.ogrId).SingleOrDefault();
+            if(kayit==null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc;
+            }
+            return kayit;
+        }
 
         #endregion
     }
