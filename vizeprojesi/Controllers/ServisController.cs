@@ -11,10 +11,11 @@ namespace vizeprojesi.Controllers
 {
     public class ServisController : ApiController
     {
-        #region soru
+        
         DB03Entities db = new DB03Entities();
         SonucModel sonuc = new SonucModel();
 
+        #region soru
         [HttpGet]
         [Route("api/soruliste")]
 
@@ -210,7 +211,115 @@ namespace vizeprojesi.Controllers
                 sonuc.mesaj = "Kayıt Bulunamadı";
                 return sonuc;
             }
+            kayit.ogrNo = model.ogrNo;
+            kayit.ogrAdSoyad = model.ogrAdSoyad;
+            kayit.ogrDogTarih = model.ogrDogTarih;
+            kayit.ogrFoto = model.ogrFoto;
+            kayit.UyeId = "1";
+
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Öğrenci Kaydı Düzenlendi";
+            return sonuc;    
+        }
+        [HttpDelete]
+        [Route("api/ogrencisil/{ogrId}")]
+
+        public SonucModel OgrenciSil(string ogrId)
+        {
+            DersiAlanOgr kayit = db.DersiAlanOgr.Where(s => s.ogrId == ogrId).SingleOrDefault();
+            if(kayit==null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc; 
+            }
+
+            db.DersiAlanOgr.Remove(kayit);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Öğrenci Silindi";
+            return sonuc;
+        }
+
+
+        #endregion
+
+        #region Dersler 
+
+        [HttpGet]
+        [Route("api/dersliste")]
+
+        public List<DerslerModel> DersListe()
+        {
+            List<DerslerModel> liste = db.Dersler.Select(x => new DerslerModel()
+            {
+                dersId=x.dersId,
+                dersKodu=x.dersKodu,
+                dersAdi=x.dersAdi,
+                dersKredi=x.dersKredi
+            }).ToList();
+            return liste;
+        }
+
+        [HttpGet]
+        [Route("api/dersnyid/{dersId}")]
+
+        public DerslerModel DersById(string dersId)
+        {
+            DerslerModel kayit = db.Dersler.Where(s => s.dersId == dersId).Select(x => new DerslerModel()
+            {
+                dersId=x.dersId,
+                dersKodu=x.dersKodu,
+                dersAdi=x.dersAdi,
+                dersKredi=x.dersKredi
+            }).FirstOrDefault();
             return kayit;
+        }
+        
+        [HttpPost]
+        [Route("api/dersekle")]
+
+        public SonucModel DersEkle(Dersler model)
+        {
+            if(db.Dersler.Count(s=> s.dersKodu == model.dersKodu) > 0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Girilen Ders Kodu Kayıtlıdır!!";
+                return sonuc;
+            }
+            Dersler yeni = new Dersler();
+            yeni.dersId = model.dersId;
+            yeni.dersKodu = model.dersKodu;
+            yeni.dersAdi = model.dersAdi;
+            yeni.dersKredi= model.dersKredi;
+            db.Dersler.Add(yeni);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Ders Eklendi";
+            return sonuc;
+        }
+
+        [HttpPut]
+        [Route("api/dersduzenle")]
+
+        public SonucModel DersDuzenle(DerslerModel model)
+        {
+            Dersler kayit = db.Dersler.Where(s => s.dersId == model.dersId).FirstOrDefault();
+
+            if(kayit==null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc;
+            }
+            kayit.dersKodu = model.dersKodu;
+            kayit.dersAdi = model.dersAdi;
+            kayit.dersKredi = model.dersAdi;
+            db.SaveChanges();
+
+            sonuc.islem = true;
+            sonuc.mesaj = "Kayıt Düzenlendi";
         }
 
         #endregion
