@@ -310,7 +310,7 @@ namespace vizeprojesi.Controllers
             if(kayit==null)
             {
                 sonuc.islem = false;
-                sonuc.mesaj = "Kayıt Bulunamadı";
+                sonuc.mesaj = "Ders Bulunamadı";
                 return sonuc;
             }
             kayit.dersKodu = model.dersKodu;
@@ -319,7 +319,28 @@ namespace vizeprojesi.Controllers
             db.SaveChanges();
 
             sonuc.islem = true;
-            sonuc.mesaj = "Kayıt Düzenlendi";
+            sonuc.mesaj = "Ders Düzenlendi";
+            return sonuc;
+        }
+
+        [HttpDelete]
+        [Route("api/derssil/{dersId}")]
+
+        public SonucModel DersSil(string dersId)
+        {
+            Dersler kayit = db.Dersler.Where(s => s.dersId == dersId).FirstOrDefault();
+
+            if(kayit==null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Ders Bulunamadı";
+                return sonuc;
+            }
+            db.Dersler.Remove(kayit);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Ders Silindi";
+            return sonuc;
         }
 
         #endregion
