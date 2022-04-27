@@ -344,5 +344,73 @@ namespace vizeprojesi.Controllers
         }
 
         #endregion
+
+        #region Üye
+        [HttpGet]
+        [Route("api/uyeliste")]
+        public List<UyeModel> UyeListe()
+        {
+            List<UyeModel> liste = db.Uye.Select(x => new UyeModel()
+            {
+                UyeId = x.UyeId,
+                AdSoyad = x.AdSoyad,
+                Email = x.Email,
+                KullaniciAdi = x.KullaniciAdi,
+                Foto = x.Foto,
+                Sifre = x.Sifre,
+                AdminUye = x.AdminUye
+            }).ToList();
+            return liste;
+        }
+
+        [HttpPost]
+        [Route("api/uyeekle")]
+        public SonucModel UyeEkle(UyeModel model)
+        {
+            if (db.Uye.Count(s => s.KullaniciAdi == model.KullaniciAdi || s.Email == model.Email) > 0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Girilen Kullanıcı Adı veya E-Posta Adresi Kayıtlıdır!";
+                return sonuc;
+            }
+            Uye yeni = new Uye();
+            yeni.AdSoyad = model.AdSoyad;
+            yeni.Email = model.Email;
+            yeni.KullaniciAdi = model.KullaniciAdi;
+            yeni.Foto = model.Foto;
+            yeni.Sifre = model.Sifre;
+            yeni.AdminUye = model.AdminUye;
+            db.Uye.Add(yeni);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Üye Eklendi";
+            return sonuc;
+        }
+
+        [HttpPut]
+        [Route("api/uyeduzenle")]
+        public SonucModel UyeDuzenle(UyeModel model)
+        {
+            Uye kayit = db.Uye.Where(s => s.UyeId == model.UyeId).SingleOrDefault();
+            if (kayit == null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc;
+            }
+            kayit.AdSoyad = model.AdSoyad;
+            kayit.Email = model.Email;
+            kayit.KullaniciAdi = model.KullaniciAdi;
+            kayit.Foto = model.Foto;
+            kayit.Sifre = model.Sifre;
+            kayit.AdminUye = model.AdminUye;
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Üye Düzenlendi";
+            return sonuc;
+        }
+        
+
+        #endregion
     }
-}
+    }
