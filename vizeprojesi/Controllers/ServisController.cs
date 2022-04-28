@@ -363,6 +363,24 @@ namespace vizeprojesi.Controllers
             return liste;
         }
 
+        [HttpGet]
+        [Route("api/uyebyid/{UyeId}")]
+        public UyeModel UyeById(string UyeId)
+        {
+            UyeModel kayit = db.Uye.Where(s => s.UyeId == UyeId).Select(x => new UyeModel()
+            {
+                UyeId=x.UyeId,
+                KullaniciAdi=x.KullaniciAdi,
+                Email=x.Email,
+                Sifre=x.Sifre,
+                AdSoyad=x.AdSoyad,
+                Foto=x.Foto,
+                AdminUye=x.AdminUye
+            }).SingleOrDefault();
+            return kayit;
+        }
+
+
         [HttpPost]
         [Route("api/uyeekle")]
         public SonucModel UyeEkle(UyeModel model)
@@ -404,9 +422,31 @@ namespace vizeprojesi.Controllers
             kayit.Foto = model.Foto;
             kayit.Sifre = model.Sifre;
             kayit.AdminUye = model.AdminUye;
+
             db.SaveChanges();
             sonuc.islem = true;
             sonuc.mesaj = "Üye Düzenlendi";
+            return sonuc;
+        }
+        [HttpDelete]
+        [Route("api/uyesil/{UyeId}")]
+
+        public SonucModel UyeSil(string UyeId)
+        {
+            Uye kayit = db.Uye.Where(s => s.UyeId == UyeId).SingleOrDefault();
+
+            if(kayit == null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc;
+            }
+           
+
+            db.Uye.Remove(kayit);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Üye Silindi";
             return sonuc;
         }
         
