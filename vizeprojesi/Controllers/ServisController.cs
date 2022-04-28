@@ -535,6 +535,27 @@ namespace vizeprojesi.Controllers
             sonuc.mesaj = "Ders Kaydı Eklendi";
             return sonuc;
         }
+
+        [HttpDelete]
+        [Route("api/kayitsil/{kayitId}")]
+
+        public SonucModel KayitSil(string kayitId)
+        {
+            Kayit kayit = db.Kayit.Where(s => s.kayitId == kayitId).SingleOrDefault();
+
+            if(kayit==null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı";
+                return sonuc;
+            }
+            db.Kayit.Remove(kayit);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Ders Kaydı Silindi";
+
+            return sonuc;
+        }
         #endregion
     }
 }
