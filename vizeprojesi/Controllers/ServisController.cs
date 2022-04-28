@@ -234,6 +234,12 @@ namespace vizeprojesi.Controllers
                 sonuc.mesaj = "Kayıt Bulunamadı";
                 return sonuc; 
             }
+            if(db.Kayit.Count(s=>s.kayitDersiAlanOgrId == ogrId)>0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Öğrenci Üzerinde Ders Kaydı Olduğu İçin Öğrenci Silinemez";
+                return sonuc;
+            }
 
             db.DersiAlanOgr.Remove(kayit);
             db.SaveChanges();
@@ -336,6 +342,14 @@ namespace vizeprojesi.Controllers
                 sonuc.mesaj = "Ders Bulunamadı";
                 return sonuc;
             }
+            if(db.Kayit.Count(s=>s.kayitDerslerId==dersId)>0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Derse Kayıtlı Öğrenci Olduğu için Ders Silinemez";
+                return sonuc;
+            }
+
+
             db.Dersler.Remove(kayit);
             db.SaveChanges();
             sonuc.islem = true;
@@ -441,6 +455,12 @@ namespace vizeprojesi.Controllers
                 sonuc.mesaj = "Kayıt Bulunamadı";
                 return sonuc;
             }
+            if(db.Soru.Count(s=>s.UyeId==UyeId)>0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Üzerinde Soru bulunan Üye Silinmez";
+                return sonuc;
+            }
            
 
             db.Uye.Remove(kayit);
@@ -449,7 +469,6 @@ namespace vizeprojesi.Controllers
             sonuc.mesaj = "Üye Silindi";
             return sonuc;
         }
-        
 
         #endregion
     }
