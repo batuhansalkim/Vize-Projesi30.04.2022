@@ -471,5 +471,30 @@ namespace vizeprojesi.Controllers
         }
 
         #endregion
+
+        #region Kayit
+        [HttpGet]
+        [Route("api/ogrencidersliste/{ogrId}")]
+
+        public List<KayitModel> OgrenciDersListe(string ogrId)
+        {
+            List<KayitModel> liste = db.Kayit.Where(s => s.kayitDersiAlanOgrId == ogrId).Select(x => new KayitModel()
+            {
+                kayitId=x.kayitId,
+                kayitDerslerId=x.kayitDerslerId,
+                kayitDersiAlanOgrId=x.kayitDersiAlanOgrId
+            }).ToList();
+
+            foreach(var kayit in liste)
+            {
+                kayit.ogrBilgi = OgrenciById(kayit.kayitDersiAlanOgrId);
+                kayit.dersBilgi = DersById(kayit.kayitDerslerId);
+            }
+
+            return liste;
+
+        }
+
+        #endregion
     }
-    }
+}
