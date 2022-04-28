@@ -492,9 +492,49 @@ namespace vizeprojesi.Controllers
             }
 
             return liste;
-
         }
 
+        [HttpGet]
+        [Route("api/dersogrenciliste/{dersId}")]
+
+        public List<KayitModel> DersOgrenciListe(string dersId)
+        {
+            List<KayitModel> liste = db.Kayit.Where(s => s.kayitDerslerId == dersId).Select(x => new KayitModel()
+            {
+                kayitId = x.kayitId,
+                kayitDerslerId = x.kayitDerslerId,
+                kayitDersiAlanOgrId = x.kayitDersiAlanOgrId
+            }).ToList();
+
+            foreach (var kayit in liste)
+            {
+                kayit.ogrBilgi = OgrenciById(kayit.kayitDersiAlanOgrId);
+                kayit.dersBilgi = DersById(kayit.kayitDerslerId);
+            }
+
+            return liste;
+        }
+
+        [HttpPost]
+        [Route("api/kayitekle")]
+        public SonucModel kayitEkle(KayitModel model)
+        {
+            if(db.Kayit.Count(s=> s.kayitDerslerId == model.kayitDerslerId && s.kayitDersiAlanOgrId == model.kayitDersiAlanOgrId)>0)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "İlgili Öğrenci Derse Önceden Kayıtlıdır";
+                return sonuc;
+            }
+            Kayit yeni = new Kayit();
+            yeni.kayitId = Guid.NewGuid().ToString();
+            yeni.kayitDersiAlanOgrId = model.kayitDersiAlanOgrId;
+            yeni.kayitDerslerId = model.kayitDerslerId;
+            db.Kayit.Add(yeni);
+            db.SaveChanges();
+            sonuc.islem = true;
+            sonuc.mesaj = "Ders Kaydı Eklendi";
+            return sonuc;
+        }
         #endregion
     }
 }
