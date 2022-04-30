@@ -69,7 +69,7 @@ namespace vizeprojesi.Controllers
                 return sonuc;
             }
             Soru yeni = new Soru();
-            yeni.SoruId = model.SoruId;
+            yeni.SoruId = Guid.NewGuid().ToString();
             yeni.soru1 = model.soru1;
             yeni.oA = model.oA;
             yeni.oB = model.oB;
@@ -185,7 +185,7 @@ namespace vizeprojesi.Controllers
             }
 
             DersiAlanOgr yeni = new DersiAlanOgr();
-            yeni.ogrId = model.ogrId;
+            yeni.ogrId = Guid.NewGuid().ToString();
             yeni.ogrNo = model.ogrNo;
             yeni.ogrAdSoyad = model.ogrAdSoyad;
             yeni.ogrDogTarih = model.ogrDogTarih;
@@ -295,7 +295,7 @@ namespace vizeprojesi.Controllers
                 return sonuc;
             }
             Dersler yeni = new Dersler();
-            yeni.dersId = model.dersId;
+            yeni.dersId = Guid.NewGuid().ToString();
             yeni.dersKodu = model.dersKodu;
             yeni.dersAdi = model.dersAdi;
             yeni.dersKredi= model.dersKredi;
