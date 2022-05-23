@@ -10,7 +10,7 @@ using vizeprojesi.ViewModel;
 namespace vizeprojesi.Controllers
 {
 
-    [Authorize]
+    
 
     public class ServisController : ApiController
     {
