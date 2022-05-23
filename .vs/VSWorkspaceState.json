@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\vizeprojesi\\Models"
+    "\\vizeprojesi",
+    "\\vizeprojesi\\Controllers"
   ],
-  "SelectedNode": "\\vizeprojesi.sln",
+  "SelectedNode": "\\vizeprojesi\\Controllers\\ServisController.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -9,8 +9,12 @@ using vizeprojesi.ViewModel;
 
 namespace vizeprojesi.Controllers
 {
+
+    [Authorize]
+
     public class ServisController : ApiController
     {
+        
         
         DB03Entities db = new DB03Entities();
         SonucModel sonuc = new SonucModel();
